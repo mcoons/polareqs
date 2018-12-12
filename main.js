@@ -8,8 +8,6 @@ document.body.setAttribute("onresize","resizeCanvas()");
 
 ////////////////////////////////////////////////////////
 
-// let width = 1200;
-// let height = 800;
 let width = window.innerWidth;
 let height = window.innerHeight;
 let halfWidth = Math.floor(width / 2);
@@ -24,11 +22,8 @@ let inc = 10000;
 let zoom = 1;
 
 let x,y,r;
-let scale = halfWidth/6;
-var a=2,b=2,c=640;
-
-// let x, y, j;
-
+let scale = wide ? halfHeight/8 : halfWidth/8;
+var a=2,b=4,c=2;
 
 let backgroundInterval = null;
 let parainterval = null;
@@ -37,11 +32,6 @@ let palette = [];
 buildPalette();
 
 let showBackground = true;
-let showTrig = false;
-let showCircles = false;
-let showCircles2 = false;
-let showCircles3 = false;
-let showKoch = false;
 let showParametric = true;
 
 resizeCanvas();
@@ -96,233 +86,49 @@ function setCanvas(){
 }
 //////////////////////////////////////////////////////////////////////
 
-
-
 function refreshImages(){
   if (showParametric) parametric(inc);
   if (showBackground) {
     clearInterval(backgroundInterval);
     backgroundInterval = scrollingBackground();
   }
-  if (showTrig) trig();
-  if (showCircles) circles(0, 0, (width-1)/4, 5);
-  if (showCircles2) circles2(0, 0, (width-1)/5, 7, null);
-  if (showCircles3) circles3(0, 0, (width - 1) / 6, 7, null);
-  if (showKoch) koch();
 }
 
 //////////////////////////////////////////////////////////////////////
-
-function trig() {
-  ctx.shadowColor = "rgba(20,20,20,.2)";
-  ctx.shadowOffsetX = 5;
-  ctx.shadowOffsetY = 5;
-  ctx.shadowBlur = 1;
-
-  ctx.fillStyle = "#FFFFFF";
-  drawText(ctx, 5, -6, "(0,0)", "12px serif");
-
-  for (let x = -Math.PI; x < Math.PI; x += 0.001) {
-    let j = width / (2 * Math.PI);
-
-    ctx.fillStyle = "#FFFFFF";
-    drawPoint(ctx, x * j * 4, 0);
-    drawPoint(ctx, 0, x * j * 4);
-
-    ctx.fillStyle = "#0000FF";
-    let y = Math.sin(x * 3);
-    drawPoint(ctx, x * j, (y * halfHeight) / 3);
-
-    ctx.fillStyle = "#00FF00";
-    y = Math.cos(x * 3);
-    drawPoint(ctx, x * j, (y * halfHeight) / 3);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////
-
-function circles(x, y, r, i) {
-  drawCircle(ctx, x, y, r, "magenta");
-
-  if (i === 0) return;
-
-  circles(x - r, y, r / 2, i - 1);
-  circles(x + r, y, r / 2, i - 1);
-  circles(x, y + r, r / 2, i - 1);
-  circles(x, y - r, r / 2, i - 1);
-}
-
-//////////////////////////////////////////////////////////////////////
-
-function circles2(x, y, r, i, dir) {
-  drawCircle(ctx, x, y, r, "red");
-
-  if (i === 0) return;
-
-  if (dir != "r") circles2(x - r - r / 2, y, r / 2, i - 1, "r");
-  if (dir != "l") circles2(x + r + r / 2, y, r / 2, i - 1, "l");
-  if (dir != "t") circles2(x, y + r + r / 2, r / 2, i - 1, "t");
-  if (dir != "b") circles2(x, y - r - r / 2, r / 2, i - 1, "b");
-}
-
-//////////////////////////////////////////////////////////////////////
-
-function circles3(x, y, r, i, dir) {
-  drawCircle(ctx, x, y, r, `#${i + 2}${i + 2}${i + 2}${i + 2}FF`);
-
-  if (i === 0) return;
-
-  if (dir != "l") circles3(x - r - r / 2, y, r / 2, i - 1, "r");
-  if (dir != "r") circles3(x + r + r / 2, y, r / 2, i - 1, "l");
-  if (dir != "b") circles3(x, y + r + r / 2, r / 2, i - 1, "t");
-  if (dir != "t") circles3(x, y - r - r / 2, r / 2, i - 1, "b");
-}
-
-//////////////////////////////////////////////////////////////////////
-
-function koch() {
-  ctx.strokeStyle = "#99FFFF";
-
-  let w = wide ? height : width;
-
-  for (let r = 2.2; r <= 80; r *= 1.34) {
-    let radius = w / r;
-
-    let rad = (90 * Math.PI) / 180;
-    let x1 = Math.cos(rad) * radius;
-    let y1 = Math.sin(rad) * radius;
-
-    rad = (210 * Math.PI) / 180;
-    let x2 = Math.cos(rad) * radius;
-    let y2 = Math.sin(rad) * radius;
-
-    rad = (330 * Math.PI) / 180;
-    let x3 = Math.cos(rad) * radius;
-    let y3 = Math.sin(rad) * radius;
-
-    kochCurve(x1, y1, x2, y2, 5);
-    kochCurve(x2, y2, x3, y3, 5);
-    kochCurve(x3, y3, x1, y1, 5);
-  }
-}
-
-function kochCurve(p1x, p1y, p2x, p2y, i) {
-  let p3x, p4x, p5x;
-  let p3y, p4y, p5y;
-
-  let theta = Math.PI / 3;
-
-  if (i > 0) {
-    p3x = (2 * p1x + p2x) / 3;
-    p3y = (2 * p1y + p2y) / 3;
-
-    p5x = (2 * p2x + p1x) / 3;
-    p5y = (2 * p2y + p1y) / 3;
-
-    p4x = p3x + (p5x - p3x) * Math.cos(theta) + (p5y - p3y) * Math.sin(theta);
-    p4y = p3y - (p5x - p3x) * Math.sin(theta) + (p5y - p3y) * Math.cos(theta);
-
-    kochCurve(p1x, p1y, p3x, p3y, i - 1);
-    kochCurve(p3x, p3y, p4x, p4y, i - 1);
-    kochCurve(p4x, p4y, p5x, p5y, i - 1);
-    kochCurve(p5x, p5y, p2x, p2y, i - 1);
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(p1x, p1y);
-    ctx.lineTo(p2x, p2y);
-    ctx.stroke();
-  }
-}
-
-//////////////////////////////////////////////////////////////////////
-
-// parametric(inc);
 
 function parametric(inc){
   ctx.fillStyle = "#FFFFFF";
-  // let x,y,r;
-  // let scale = halfWidth/6;
-  // var a=2,b=2,c=640;
-    
-  // var formulatext = document.createElement('label');
-  // formulatext.innerText = "r = A + B * cos(C * theta)";
-  // document.getElementById('form').appendChild(formulatext);
 
   var aslider = document.getElementById('aValue');
   var atext = document.getElementById('aText');
-  // aslider.id = "aValue";
-  // aslider.type = 'range';
-  // aslider.min = 0;
-  // aslider.max = 10;
   aslider.value = a;
-  // aslider.step = 1;
   aslider.oninput = function(){atext.innerText = "Value of A: " + aslider.value; update()}
-  // document.getElementById('form').appendChild(aslider);
   atext.innerText = "Value of A: " + aslider.value;
-  // var atext = document.createElement('label');
-  // atext.innerText = "Value of A: "+a;
-  // document.getElementById('form').appendChild(atext);
 
   var bslider = document.getElementById('bValue');
   var btext = document.getElementById('bText');
-  // bslider.id = "bValue";
-  // bslider.type = 'range';
-  // bslider.min = 0;
-  // bslider.max = 10;
   bslider.value = b;
-  // bslider.step = 1;
   bslider.oninput = function(){btext.innerText = "Value of B: " + bslider.value; update()}
-  // document.getElementById('form').appendChild(bslider);
   btext.innerText = "Value of B: " + bslider.value;
-  // var btext = document.createElement('label');
-  // btext.innerText = "Value of B: "+b;
-  // document.getElementById('form').appendChild(btext);
+
 
   var cslider = document.getElementById('cValue');
   var ctext = document.getElementById('cText');
-  // cslider.id = "cValue";
-  // cslider.type = 'range';
-  // cslider.min = 1;
-  // cslider.max = 1000;
   cslider.value = c;
-  // cslider.step = 1;
   cslider.oninput = function(){ctext.innerText = "Value of C: " + cslider.value; update()}
-  // document.getElementById('form').appendChild(cslider);
   ctext.innerText = "Value of C: " + cslider.value;
-  // var ctext = document.createElement('label');
-  // ctext.innerText = "Value of C: "+c;
-  // document.getElementById('form').appendChild(ctext);
 
   var islider = document.getElementById('iValue');
   var itext = document.getElementById('iText');
-  // islider.id = "iValue";
-  // islider.type = 'range';
-  // islider.min = 100;
-  // islider.max = 100000;
   islider.value = inc;
-  // islider.step = 1;
   islider.oninput = function(){itext.innerText = "Value of theta step: (" + islider.value + ") " + Math.PI/islider.value; update()}
-  // document.getElementById('form').appendChild(islider);
   itext.innerText = "Value of theta step: (" + islider.value + ") " + Math.PI/islider.value;
-  // var itext = document.createElement('label');
-  // itext.innerText = "Value of theta step: "+Math.PI/islider.value;
-  // document.getElementById('form').appendChild(itext);
 
   var zslider = document.getElementById('zValue');
   var ztext = document.getElementById('zText');
-  // zslider.id = "zValue";
-  // zslider.type = 'range';
-  // zslider.min = 1;
-  // zslider.max = 100;
   zslider.value = zoom*10;
-  // zslider.step = 1;
   zslider.oninput = function(){ztext.innerText = "Value of zoom: " + zslider.value/10; update()}
-  // document.getElementById('form').appendChild(zslider);
   ztext.innerText = "Value of zoom: " + zslider.value/10;
-  // var ztext = document.createElement('label');
-  // ztext.innerText = "Value of zoom: "+zoom;
-  // document.getElementById('form').appendChild(ztext);
-
 
   function update(){  a=Number(aslider.value); 
                       b=Number(bslider.value); 
