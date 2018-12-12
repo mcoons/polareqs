@@ -1,0 +1,44 @@
+/* html, body, #wrapper {
+    height:100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+ } */
+ 
+
+canvas {
+    /* display:inline-block; */
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid red; */
+}
+
+#background {
+    /* position: absolute; */
+    z-index: -55;
+}
+
+form {
+    position: absolute;
+    background-color: lightblue;
+    width: 190px;
+    padding: 10px;
+    z-index: 65;
+}
+
+input, label, button {
+    position: relative;
+    display:block;
+}
+
+label {
+    margin-bottom: 15px;
+}
+
+#container{
+    /* align-content: center; */
+    text-align: center;
+    /* margin: auto; */
+}
