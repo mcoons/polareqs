@@ -1,22 +1,17 @@
-/* html, body, #wrapper {
-    height:100%;
-    width: 100%;
+document, body {
     margin: 0;
     padding: 0;
-    border: 0;
- } */
- 
+    background-color: red;
+}
+
 
 canvas {
-    /* display:inline-block; */
     position: absolute;
     margin: 0;
     padding: 0;
-    /* border: 1px solid red; */
 }
 
 #background {
-    /* position: absolute; */
     z-index: -55;
 }
 
@@ -28,17 +23,21 @@ form {
     z-index: 65;
 }
 
-input, label, button {
+input, label{
     position: relative;
     display:block;
+}
+
+button {
+    position: relative;
+    z-index: 75
+    /* display:block; */
 }
 
 label {
     margin-bottom: 15px;
 }
 
-#container{
-    /* align-content: center; */
+/* #container{
     text-align: center;
-    /* margin: auto; */
-}
+} */

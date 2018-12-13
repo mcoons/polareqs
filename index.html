@@ -3,28 +3,29 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Canvas Play</title>
+    <title>Polar Equations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js" defer></script>
 </head>
 <body>
-    <div id="container">
+    <!-- <div id="container"> -->
     <canvas id="canvas1"></canvas>
     <canvas id="background"></canvas>
-    </div>
+    <!-- </div> -->
     <form id = "form">
         <label>r = A + B * cos(C * theta)</label>
         <input id="aValue" type="range" min="0" max="10" step="1">
         <label id="aText"></label>
         <input id="bValue" type="range" min="0" max="10" step="1">
         <label id="bText"></label>
-        <input id="cValue" type="range" min="1" max="1000" step="1">
+        <input id="cValue" type="range" min="0" max="1000" step="1">
         <label id="cText"></label>
         <input id="iValue" type="range" min="100" max="100000" step="1">
         <label id="iText"></label>
         <input id="zValue" type="range" min="1" max="100" step="1">
-        <label id="zText"></label></form>
+        <label id="zText"></label>
+        <button><a id="download" download="myImage.png" href="" onclick="download_img(this);">Download to myImage.png</a></button>
     </form>
 </body>
 </html>   

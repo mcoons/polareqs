@@ -1,10 +1,15 @@
-let background = document.getElementById("background");
-let backCtx = background.getContext("2d");
+let backgroundCanvas = document.getElementById("background");
+let backgroundCtx = backgroundCanvas.getContext("2d");
 
 let canvas = document.getElementById("canvas1");
 let ctx = canvas.getContext("2d");
 
 document.body.setAttribute("onresize","resizeCanvas()");
+
+download_img = function(el) {
+  var image = canvas.toDataURL("image/png");
+  el.href = image;
+};
 
 ////////////////////////////////////////////////////////
 
@@ -20,6 +25,9 @@ let colorTheta = 1530;
 let index = 0;
 let inc = 10000;
 let zoom = 1;
+var changed = true;
+var backgroundChanged = true;
+
 
 let x,y,r;
 let scale = wide ? halfHeight/8 : halfWidth/8;
@@ -31,8 +39,9 @@ let parainterval = null;
 let palette = [];
 buildPalette();
 
-let showBackground = true;
-let showParametric = true;
+let backgroundType = "black";  // "colored", "black", "white"
+// let showParametric = true;
+// var scrollingColors = true;  // 
 
 resizeCanvas();
 
@@ -48,6 +57,9 @@ function resizeCanvas(){
   
   wide = width > height ? true : false;
 
+  changed = true;
+  backgroundChanged = true;
+
   setBackground();
   setCanvas();
   refreshImages();
@@ -56,18 +68,17 @@ function resizeCanvas(){
 ////////////////////////////////////////////////////////
 
 function setBackground(){
-  background.width = width;
-  background.height = height;
-  background.style.width = width;
-  background.style.height = height;
-  background.style.left = `${viewportWidth/2 - halfWidth}px`;
-  background.style.top = `${viewportHeight/2 - halfHeight}px`;
+  backgroundCanvas.width = width;
+  backgroundCanvas.height = height;
+  backgroundCanvas.style.width = width;
+  backgroundCanvas.style.height = height;
+  // background.style.left = `${width/2 - halfWidth}px`;
+  // background.style.top = `${width/2 - halfHeight}px`;
 
+  backgroundCtx.translate(halfWidth,halfHeight);
 
-  backCtx.translate(halfWidth,halfHeight);
-
-  backCtx.fillStyle = "#000000";
-  backCtx.fillRect(-halfWidth,-halfHeight,width,height);
+  // backgroundCtx.fillStyle = "#000000";
+  // backgroundCtx.fillRect(-halfWidth,-halfHeight,width,height);
 
 }
 ////////////////////////////////////////////////////////
@@ -77,8 +88,8 @@ function setCanvas(){
   canvas.height = height;
   canvas.style.width = width;
   canvas.style.height = height;
-  canvas.style.left = `${viewportWidth/2 - halfWidth}px`;
-  canvas.style.top = `${viewportHeight/2 - halfHeight}px`;
+  // canvas.style.left = `${width/2 - halfWidth}px`;
+  // canvas.style.top = `${width/2 - halfHeight}px`;
 
   ctx.translate(halfWidth, halfHeight);
 
@@ -87,10 +98,25 @@ function setCanvas(){
 //////////////////////////////////////////////////////////////////////
 
 function refreshImages(){
-  if (showParametric) parametric(inc);
-  if (showBackground) {
+  parametric(inc);
+  if (backgroundChanged) {
+    backgroundChanged = false;
     clearInterval(backgroundInterval);
-    backgroundInterval = scrollingBackground();
+    console.log("setting background");
+    if(backgroundType === "colored"){
+      console.log("setting background colored");
+      backgroundInterval = scrollingBackground();
+    } else 
+    if (backgroundType === "black"){
+      console.log("setting background black");
+      backgroundCtx.fillStyle = "#000000";
+      backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
+    } else
+    if (backgroundType === "white"){
+      console.log("setting background white");
+      backgroundCtx.fillStyle = "#FFFFFF";
+      backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
+    }
   }
 }
 
@@ -110,7 +136,6 @@ function parametric(inc){
   bslider.value = b;
   bslider.oninput = function(){btext.innerText = "Value of B: " + bslider.value; update()}
   btext.innerText = "Value of B: " + bslider.value;
-
 
   var cslider = document.getElementById('cValue');
   var ctext = document.getElementById('cText');
@@ -135,7 +160,7 @@ function parametric(inc){
                       c=Number(cslider.value); 
                       inc = Number(islider.value);
                       zoom = Number(zslider.value/10);
-                      // drawParametric(a,b,c); 
+                      changed = true;
                     }
 
 
@@ -143,6 +168,10 @@ function parametric(inc){
   parainterval = setInterval( drawParametric, 100);
 
   function drawParametric(){
+    if (!changed) return;
+
+    changed = false;
+
     clear(ctx);
     ctx.save();
 
@@ -175,6 +204,9 @@ function parametric(inc){
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// Utility Functions
 //////////////////////////////////////////////////////////////////////
 
 function drawCircle(ctx, cx, cy, radius, color) {
@@ -203,6 +235,10 @@ function drawText(ctx, x, y, txt, font) {
 function clear(ctx) {
   ctx.clearRect(-halfWidth, -halfHeight, width, height);
 }
+
+//////////////////////////////////////////////////////////////////////
+// Palette Functions
+//////////////////////////////////////////////////////////////////////
 
 // index:   into color palette
 // percent: -1 = black bias, 0 = actual, 1 = white bias
@@ -261,7 +297,7 @@ function buildPalette(){
 
 function scrollingBackground(){
 
-  let interval = setInterval(scrollColors, 20, backCtx, -.75);
+  let interval = setInterval(scrollColors, 20, backgroundCtx, -.75);
   return interval;
 
   function scrollColors(ctx, percent){
