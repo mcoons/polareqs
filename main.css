@@ -28,6 +28,10 @@ input, label{
     display:block;
 }
 
+#colored, #black, #white, #lighten, #difference, #screen {
+    display: inline-block;
+}
+
 button {
     position: relative;
     z-index: 75

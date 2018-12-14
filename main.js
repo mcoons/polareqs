@@ -3,12 +3,14 @@ let backgroundCtx = backgroundCanvas.getContext("2d");
 
 let canvas = document.getElementById("canvas1");
 let ctx = canvas.getContext("2d");
+ctx.globalAlpha = 0;
 
 document.body.setAttribute("onresize","resizeCanvas()");
 
 download_img = function(el) {
-  var image = canvas.toDataURL("image/png");
-  el.href = image;
+  // var image = canvas.toDataURL("image/png");
+  el.href = canvas.toDataURL("image/png");
+  el.download = "mypainting.png"
 };
 
 ////////////////////////////////////////////////////////
@@ -23,15 +25,16 @@ let wide = width > height ? true : false;
 
 let colorTheta = 1530;
 let index = 0;
-let inc = 10000;
+let inc = 79717;
+let inc2 = 79717;
 let zoom = 1;
 var changed = true;
 var backgroundChanged = true;
 
-
 let x,y,r;
 let scale = wide ? halfHeight/8 : halfWidth/8;
-var a=2,b=4,c=2;
+var a=2,b=7,c=929;
+var a2=2,b2=7,c2=929;
 
 let backgroundInterval = null;
 let parainterval = null;
@@ -39,9 +42,8 @@ let parainterval = null;
 let palette = [];
 buildPalette();
 
-let backgroundType = "black";  // "colored", "black", "white"
-// let showParametric = true;
-// var scrollingColors = true;  // 
+let backgroundType = "colored";  // "colored", "black", "white"
+let compositeType = "screen"; // "lighten", "difference", "screen"
 
 resizeCanvas();
 
@@ -72,15 +74,9 @@ function setBackground(){
   backgroundCanvas.height = height;
   backgroundCanvas.style.width = width;
   backgroundCanvas.style.height = height;
-  // background.style.left = `${width/2 - halfWidth}px`;
-  // background.style.top = `${width/2 - halfHeight}px`;
-
   backgroundCtx.translate(halfWidth,halfHeight);
-
-  // backgroundCtx.fillStyle = "#000000";
-  // backgroundCtx.fillRect(-halfWidth,-halfHeight,width,height);
-
 }
+
 ////////////////////////////////////////////////////////
 
 function setCanvas(){
@@ -88,13 +84,10 @@ function setCanvas(){
   canvas.height = height;
   canvas.style.width = width;
   canvas.style.height = height;
-  // canvas.style.left = `${width/2 - halfWidth}px`;
-  // canvas.style.top = `${width/2 - halfHeight}px`;
-
   ctx.translate(halfWidth, halfHeight);
-
   clear(ctx);
 }
+
 //////////////////////////////////////////////////////////////////////
 
 function refreshImages(){
@@ -102,18 +95,18 @@ function refreshImages(){
   if (backgroundChanged) {
     backgroundChanged = false;
     clearInterval(backgroundInterval);
-    console.log("setting background");
+    // console.log("setting background");
     if(backgroundType === "colored"){
-      console.log("setting background colored");
+      // console.log("setting background colored");
       backgroundInterval = scrollingBackground();
     } else 
     if (backgroundType === "black"){
-      console.log("setting background black");
+      // console.log("setting background black");
       backgroundCtx.fillStyle = "#000000";
       backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
     } else
     if (backgroundType === "white"){
-      console.log("setting background white");
+      // console.log("setting background white");
       backgroundCtx.fillStyle = "#FFFFFF";
       backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
     }
@@ -123,7 +116,7 @@ function refreshImages(){
 //////////////////////////////////////////////////////////////////////
 
 function parametric(inc){
-  ctx.fillStyle = "#FFFFFF";
+  // ctx.fillStyle = "#FFFFFF";
 
   var aslider = document.getElementById('aValue');
   var atext = document.getElementById('aText');
@@ -149,46 +142,99 @@ function parametric(inc){
   islider.oninput = function(){itext.innerText = "Value of theta step: (" + islider.value + ") " + Math.PI/islider.value; update()}
   itext.innerText = "Value of theta step: (" + islider.value + ") " + Math.PI/islider.value;
 
+
+
+  var aslider2 = document.getElementById('aValue2');
+  var atext2 = document.getElementById('aText2');
+  aslider2.value = a2;
+  aslider2.oninput = function(){atext2.innerText = "Value of A: " + aslider2.value; update()}
+  atext2.innerText = "Value of A: " + aslider2.value;
+
+  var bslider2 = document.getElementById('bValue2');
+  var btext2 = document.getElementById('bText2');
+  bslider2.value = b2;
+  bslider2.oninput = function(){btext2.innerText = "Value of B: " + bslider2.value; update()}
+  btext2.innerText = "Value of B: " + bslider2.value;
+
+  var cslider2 = document.getElementById('cValue2');
+  var ctext2 = document.getElementById('cText2');
+  cslider2.value = c2;
+  cslider2.oninput = function(){ctext2.innerText = "Value of C: " + cslider2.value; update()}
+  ctext2.innerText = "Value of C: " + cslider2.value;
+
+  var islider2 = document.getElementById('iValue2');
+  var itext2 = document.getElementById('iText2');
+  islider2.value = inc2;
+  islider2.oninput = function(){itext2.innerText = "Value of theta step: (" + islider2.value + ") " + Math.PI/islider2.value; update()}
+  itext2.innerText = "Value of theta step: (" + islider2.value + ") " + Math.PI/islider.value;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   var zslider = document.getElementById('zValue');
   var ztext = document.getElementById('zText');
   zslider.value = zoom*10;
   zslider.oninput = function(){ztext.innerText = "Value of zoom: " + zslider.value/10; update()}
   ztext.innerText = "Value of zoom: " + zslider.value/10;
 
+  var coloredRadio = document.getElementById('colored');
+  coloredRadio.oninput = function(){console.log("colored radio");backgroundType = "colored"; backgroundChanged=true;refreshImages();}
+  var blackRadio = document.getElementById('black');
+  blackRadio.oninput = function(){console.log("black radio");backgroundType = "black"; backgroundChanged=true;refreshImages();}
+  var whiteRadio = document.getElementById('white');
+  whiteRadio.oninput = function(){console.log("white radio");backgroundType = "white"; backgroundChanged=true;refreshImages();}
+
   function update(){  a=Number(aslider.value); 
                       b=Number(bslider.value); 
                       c=Number(cslider.value); 
                       inc = Number(islider.value);
+                      a2=Number(aslider2.value); 
+                      b2=Number(bslider2.value); 
+                      c2=Number(cslider2.value); 
+                      inc2 = Number(islider2.value);
                       zoom = Number(zslider.value/10);
                       changed = true;
                     }
 
 
   clearInterval(parainterval);
-  parainterval = setInterval( drawParametric, 100);
+  parainterval = setInterval( drawParametric, 300);
 
   function drawParametric(){
     if (!changed) return;
 
     changed = false;
 
-    clear(ctx);
+    ctx.globalCompositeOperation = compositeType;
     ctx.save();
+    clear(ctx);
 
     ctx.scale(zoom,zoom);
-    // console.log("a",a);
-    // console.log("b",b);
-    // console.log("c",c);
-
 
     for (let theta = 0; theta <= 2*Math.PI; theta+=Math.PI/inc){
       r = (a+b*Math.sin(c*theta));
-      ctx.fillStyle = 'red';
-      // console.log("r",r)
-      // console.log("palette", palette)
-      ctx.fillStyle = palette[(Math.abs(Math.round(265*r)+colorTheta)%1530)].color;
-      x = Math.cos(theta+Math.PI/4)*r*scale;
-      y = Math.sin(theta+Math.PI/4)*r*scale;
+      ctx.fillStyle = palette[(Math.abs(Math.round(265*r)+colorTheta)%1530)].color;   
+      x = Math.cos(theta)*r*scale;
+      y = Math.sin(theta)*r*scale;
+      drawPoint(ctx, x, y, 1);
+    }
+
+
+    for (let theta = 0; theta <= 2*Math.PI; theta+=Math.PI/inc2){
+      r = (a2+b2*Math.sin(c2*theta));
+      ctx.fillStyle = palette[(Math.abs(Math.round(265*r)+colorTheta)%1530)].color;   
+      x = Math.cos(theta)*r*scale;
+      y = Math.sin(theta)*r*scale;
       drawPoint(ctx, x, y, 1);
     }
 
@@ -198,6 +244,7 @@ function parametric(inc){
     if (colorTheta < 0) colorTheta = 1530;
   }
 
+  
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -242,7 +289,7 @@ function clear(ctx) {
 
 // index:   into color palette
 // percent: -1 = black bias, 0 = actual, 1 = white bias
-function getColor(index, percent){   
+function getColor(index, percent = 0){   
   let color = palette[index%1530].color;
   let newColor = shadeRGBColor(color, percent); 
   return newColor;
@@ -302,21 +349,15 @@ function scrollingBackground(){
 
   function scrollColors(ctx, percent){
     bColor1 = getColor( index%1530, percent);
-    // bColor2 = getColor( (index+255)%1530, percent);
     bColor3 = getColor( (index+510)%1530, percent);
-    // bColor4 = getColor( (index+765)%1530, percent);
     bColor5 = getColor( (index+1020)%1530, percent);
-    // bColor6 = getColor( (index+1275)%1530, percent);
 
     let gradient = ctx.createRadialGradient(0,0,width/20, 0,0,width/1.5);
 
     // Add three color stops
     gradient.addColorStop(0,  bColor1);
-    // gradient.addColorStop(.2, bColor2);
     gradient.addColorStop(.5, bColor3);
-    // gradient.addColorStop(.6, bColor4);
     gradient.addColorStop(1, bColor5);
-    // gradient.addColorStop(1,  bColor6);
 
     ctx.fillStyle = gradient;
     ctx.fillRect(-halfWidth, -halfHeight, width, height);
@@ -325,7 +366,6 @@ function scrollingBackground(){
     index = index%1530;
   }
 }
-
 
 ///////////////////////////
 // Canvas 2D Properties

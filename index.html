@@ -15,17 +15,49 @@
     <!-- </div> -->
     <form id = "form">
         <label>r = A + B * cos(C * theta)</label>
-        <input id="aValue" type="range" min="0" max="10" step="1">
+        <input id="aValue" type="range" min="0" max="10" step=".5">
         <label id="aText"></label>
-        <input id="bValue" type="range" min="0" max="10" step="1">
+        <input id="bValue" type="range" min="0" max="10" step=".5">
         <label id="bText"></label>
         <input id="cValue" type="range" min="0" max="1000" step="1">
         <label id="cText"></label>
         <input id="iValue" type="range" min="100" max="100000" step="1">
         <label id="iText"></label>
+        <br><br>
+
+        <input id="aValue2" type="range" min="0" max="10" step=".5">
+        <label id="aText2"></label>
+        <input id="bValue2" type="range" min="0" max="10" step=".5">
+        <label id="bText2"></label>
+        <input id="cValue2" type="range" min="0" max="1000" step="1">
+        <label id="cText2"></label>
+        <input id="iValue2" type="range" min="100" max="100000" step="1">
+        <label id="iText2"></label>
+
+
+
+        <br><br>
         <input id="zValue" type="range" min="1" max="100" step="1">
         <label id="zText"></label>
-        <button><a id="download" download="myImage.png" href="" onclick="download_img(this);">Download to myImage.png</a></button>
+            
+            <label for="colored">
+                <input type="radio" id="colored" name="background" value="colored"
+                    checked>
+                Colored Background
+            </label>
+
+            <label for="black">
+                <input type="radio" id="black" name="background" value="black">
+                Black Background
+            </label>
+              
+            <label for="white">
+                <input type="radio" id="white" name="background" value="white">
+                White Background
+            </label>
+
+            <br>
+        <button><a id="download" download="myImage.png" onclick="download_img(this);">Download to myImage.png</a></button>
     </form>
 </body>
 </html>   
