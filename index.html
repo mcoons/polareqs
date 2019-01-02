@@ -13,9 +13,24 @@
     <canvas id="canvas1"></canvas>
     <canvas id="background"></canvas>
     <form id = "leftform">
-        <label class="formula">r = A + B * cos(C * (&theta; + rot))</label>
-        
-
+        <div id="lequations">
+            <label for="leq1">
+                <input type="radio" id="leq1" name="lequations" value="leq1" checked>
+                r = A + B * cos(C * (&theta; + rot))
+            </label>
+            <br>
+            <label for="leq2">
+                <input type="radio" id="leq2" name="lequations" value="leq2">
+                r = A * &theta;
+            </label>
+            <br>              
+            <label for="leq3">
+                <input type="radio" id="leq3" name="lequations" value="leq3">
+                r = &radic;(A&sup2; * sin(B * (&theta; + rot)))
+            </label>
+        </div>        
+<br>        
+        <label id="leqlabel" class="formula">r = A + B * cos(C * (&theta; + rot))</label>
         &nbsp;-10 <input id="aValue" class="slider" type="range" min="-10" max="10" step=".5"> 10
         <label class="varlabel">Value of A:</label>
         <input id="aText" class="textinput" type="number" min="-10" max="10" step=".5">
@@ -46,8 +61,7 @@
 
         <div id="bkg">
             <label for="colored">
-                <input type="radio" id="colored" name="background" value="colored"
-                    checked>
+                <input type="radio" id="colored" name="background" value="colored" checked>
                 Colored Background
             </label>
 
@@ -69,27 +83,43 @@
 
 
     <form id = "rightform">
-
-        <label class="formula">r2 = A2 + B2 * cos(C2 * (&theta;2 + rot2))</label>
+        <div id="requations">
+            <label for="req1">
+                <input type="radio" id="req1" name="requations" value="req1" checked>
+                r = A<sub>2</sub> + B<sub>2</sub> * cos(C<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>))
+            </label>
+            <br>
+            <label for="req2">
+                <input type="radio" id="req2" name="requations" value="req2">
+                r = A<sub>2</sub> * &theta;<sub>2</sub>
+            </label>
+            <br>              
+            <label for="req3">
+                <input type="radio" id="req3" name="requations" value="req3">
+                r = &radic;(A<sub>2</sub>&sup2; * sin(B<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>)))
+            </label>
+        </div>        
+        <br>    
+        <label id="reqlabel" class="formula">r2 = A2 + B2 * cos(C2 * (&theta;2 + rot2))</label>
         
         &nbsp;-10 <input id="aValue2" class="slider" type="range" min="-10" max="10" step=".5"> 10
-        <label class="varlabel">Value of A2:</label>
+        <label class="varlabel">Value of A<sub>2</sub>:</label>
         <input id="aText2" class="textinput" type="number" min="-10" max="10" step=".5">
 <br>
         &nbsp;-10 <input id="bValue2" class="slider" type="range" min="-10" max="10" step=".5"> 10
-        <label class="varlabel">Value of B2:</label>
+        <label class="varlabel">Value of B<sub>2</sub>:</label>
         <input id="bText2" class="textinput" type="number" min="-10" max="10" step=".5">
 <br>
         &nbsp;&nbsp;&nbsp;&nbsp;0 <input id="cValue2" class="slider" type="range" min="0" max="1000" step="1"> 1000
-        <label class="varlabel">Value of C2:</label>
+        <label class="varlabel">Value of C<sub>2</sub>:</label>
         <input id="cText2" class="textinput" type="number" min="0" max="1000" step="1">
 <br>
         100 <input id="iValue2" class="slider" type="range" min="100" max="100000" step="1"> 100K
-        <label class="varlabel">&theta;2 step: &nbsp; (&pi;/ </label>
+        <label class="varlabel">&theta;<sub>2</sub> step: &nbsp; (&pi;/ </label>
         <input id="iText2" class="textinput" type="number" min="100" max="100000" step="1">)
 <br>
         &nbsp;-&pi;&nbsp; <input id="rValue2" class="slider" type="range" min="-3.1416" max="3.1416" step=".0001"> &nbsp;&pi;
-        <label class="varlabel">Rotation2:</label>
+        <label class="varlabel">Rotation<sub>2</sub>:</label>
         &nbsp;&nbsp;&nbsp;&nbsp;<input id="rText2" class="textinput" type="number" min="-3.1416" max="3.1416" step=".0001">
 
     </form>

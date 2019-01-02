@@ -49,7 +49,6 @@ canvas {
     width: 155px;
     margin: 0;
     padding: 0;
-    /* display: inline-block; */
     position: relative;
     margin-bottom: 5px;
     margin-top: 10px;
@@ -60,33 +59,11 @@ canvas {
     margin: 0;
     padding: 0;
     display: inline-block;
-    /* margin-top: -5px; */
 }
 
 .varlabel {
     margin-left: 30px;
 }
-/* .textinput {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    margin-top: -5px;
-} */
-
-
-
-
-/* .slider {
-    width: 155px;
-    padding: 0;
-    margin-top: 0px;
-    margin-bottom: -5px;
-} */
-
-/* input, label{
-    position: relative;
-    display: inline-block;
-} */
 
 #colored, #black, #white, #lighten, #difference, #screen {
     display: inline-block;
@@ -95,32 +72,9 @@ canvas {
 button {
     position: relative;
     z-index: 75
-    /* display:block; */
 }
-
-/* input {
-    padding: 0;
-    margin-bottom: 0px;
-    margin-right: 0px;
-} */
-
-
-/* .varlabel, .textinput {
-    width: 94px;
-    padding: 0;
-    margin-top: 0px;
-    margin-bottom: 0px;
-} */
-
-/* .textinput {
-    width: 55px;
-} */
 
 #bkg label {
     display: block;
     margin-bottom: 0px;
 }
-
-/* #container{
-    text-align: center;
-} */
