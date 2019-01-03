@@ -1,21 +1,15 @@
-
 document.body.setAttribute('onresize', 'resizeCanvas()');
 
 window.addEventListener('keydown',
-  function (e) { 
-    if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) { 
-      if (e.target.nodeName == 'INPUT' && e.target.type == 'number') { 
-        e.preventDefault(); 
-        return false; 
-      } 
-    } 
-  }, 
-true);
-
-// download_img = function (dlLink) {
-//   dlLink.href = canvas.toDataURL('image/png');
-//   dlLink.download = 'mypainting.png'
-// };
+  function (e) {
+    if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+      if (e.target.nodeName == 'INPUT' && e.target.type == 'number') {
+        e.preventDefault();
+        return false;
+      }
+    }
+  },
+  true);
 
 function downloadImage(dlLink) {
   dlLink.href = canvas.toDataURL('image/png');
@@ -31,54 +25,53 @@ let backgroundCtx = backgroundCanvas.getContext('2d');
 let canvas = document.querySelector('#canvas1');
 let ctx = canvas.getContext('2d');
 ctx.globalAlpha = 0;
+ctx.globalCompositeOperation = 'screen';
 
-let leq1 = document.querySelector('#leq1');
-let leq2 = document.querySelector('#leq2');
-let leq3 = document.querySelector('#leq3');
+let lEq1 = document.querySelector('#lEq1');
+let lEq2 = document.querySelector('#lEq2');
+let lEq3 = document.querySelector('#lEq3');
 
-let leqlabel = document.querySelector("#leqlabel");
+let lEqlabel = document.querySelector("#lEqlabel");
 
-let aslider = document.querySelector('#aValue');
-let atext = document.querySelector('#aText');
+let aSlider = document.querySelector('#aValue');
+let aText = document.querySelector('#aText');
 
-let bslider = document.querySelector('#bValue');
-let btext = document.querySelector('#bText');
+let bSlider = document.querySelector('#bValue');
+let bText = document.querySelector('#bText');
 
-let cslider = document.querySelector('#cValue');
-let ctext = document.querySelector('#cText');
+let cSlider = document.querySelector('#cValue');
+let cText = document.querySelector('#cText');
 
-let rslider = document.querySelector('#rValue');
-let rtext = document.querySelector('#rText');
+let rSlider = document.querySelector('#rValue');
+let rText = document.querySelector('#rText');
 
-let islider = document.querySelector('#iValue');
-let itext = document.querySelector('#iText');
+let iSlider = document.querySelector('#iValue');
+let iText = document.querySelector('#iText');
 
 
-let req1 = document.querySelector('#req1');
-let req2 = document.querySelector('#req2');
-let req3 = document.querySelector('#req3');
+let rEq1 = document.querySelector('#rEq1');
+let rEq2 = document.querySelector('#rEq2');
+let rEq3 = document.querySelector('#rEq3');
 
-let reqlabel = document.querySelector("#reqlabel");
+let rEqlabel = document.querySelector("#rEqlabel");
 
-let aslider2 = document.querySelector('#aValue2');
-let atext2 = document.querySelector('#aText2');
+let aSlider2 = document.querySelector('#aValue2');
+let aText2 = document.querySelector('#aText2');
 
-let bslider2 = document.querySelector('#bValue2');
-let btext2 = document.querySelector('#bText2');
+let bSlider2 = document.querySelector('#bValue2');
+let bText2 = document.querySelector('#bText2');
 
-let cslider2 = document.querySelector('#cValue2');
-let ctext2 = document.querySelector('#cText2');
+let cSlider2 = document.querySelector('#cValue2');
+let cText2 = document.querySelector('#cText2');
 
-let rslider2 = document.querySelector('#rValue2');
-let rtext2 = document.querySelector('#rText2');
+let rSlider2 = document.querySelector('#rValue2');
+let rText2 = document.querySelector('#rText2');
 
-let islider2 = document.querySelector('#iValue2');
-let itext2 = document.querySelector('#iText2');
-
+let iSlider2 = document.querySelector('#iValue2');
+let iText2 = document.querySelector('#iText2');
 
 let zslider = document.querySelector('#zValue');
 let ztext = document.querySelector('#zText');
-
 
 let coloredRadio = document.querySelector('#colored');
 let blackRadio = document.querySelector('#black');
@@ -91,31 +84,31 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 let halfWidth = Math.floor(width / 2);
 let halfHeight = Math.floor(height / 2);
-// let viewportWidth = window.innerWidth;
-// let viewportHeight = window.innerHeight;
-let wide = width > height ? true : false;
+// let wide = width > height ? true : false;
+let wide = width > height;
 
 let colorTheta = 1530;
 let index = 0;
 let inc = inc2 = 1000;
 let rot = rot2 = 0
 let zoom = 1;
-let changed = true;
+let rChanged = lChanged = true;
 let backgroundChanged = true;
 
 let x, y, r;
 let scale = wide ? halfHeight / 8 : halfWidth / 8;
-let a = 2, b = 4, c = 6;
-let a2 = 5, b2 = 2.5, c2 = 6;
-let leqType = 'eq1';
-let reqType = 'eq1';
+let a = 2,
+    b = 4,
+    c = 6;
+let a2 = 5,
+    b2 = 2.5,
+    c2 = 6;
+let lEqType = 'Eq1';
+let rEqType = 'Eq1';
 let neg_r = null;
 
 let backgroundInterval = null;
-let parainterval = null;
-
-let backgroundType = 'black';  // 'colored', 'black', 'white'
-let compositeType = 'screen'; // 'lighten', 'difference', 'screen'
+let backgroundType = 'black'; // 'colored', 'black', 'white'
 
 let palette = [];
 
@@ -129,141 +122,238 @@ setEqLabel();
 resizeCanvas();
 
 ////////////////////////////////////////////////////////
-// Initialize HTML elements
+// Initialize HTML elements with events and values
 
-function setInputs(){
-
+function setInputs() {
   // Left equation options
-  leq1.oninput = function () { leqType = 'eq1'; changed = true; setEqLabel(); saveState(); refreshImages(); }
-  leq2.oninput = function () { leqType = 'eq2'; changed = true; setEqLabel(); saveState(); refreshImages(); }
-  leq3.oninput = function () { leqType = 'eq3'; changed = true; setEqLabel(); saveState(); refreshImages(); }
+  lEq1.oninput = function () {
+    lEqType = 'Eq1';
+    lChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
+  lEq2.oninput = function () {
+    lEqType = 'Eq2';
+    lChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
+  lEq3.oninput = function () {
+    lEqType = 'Eq3';
+    lChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
 
-  document.getElementById('l'+leqType).checked = true;
+  document.getElementById('l' + lEqType).checked = true;
 
   // Left equation variables
-  atext.value = aslider.value = a;
-  aslider.oninput = function () { atext.value = aslider.value; update() }
-  // atext.value = aslider.value;
-  atext.oninput = function () { aslider.value = atext.value; update() }
+  aSlider.oninput = function () {
+    aText.value = aSlider.value;
+    update()
+  }
+  aText.oninput = function () {
+    aSlider.value = aText.value;
+    update()
+  }
+  aText.value = aSlider.value = a;
 
-  btext.value = bslider.value = b;
-  bslider.oninput = function () { btext.value = bslider.value; update() }
-  // btext.value = bslider.value;
-  btext.oninput = function () { bslider.value = btext.value; update() }
+  bSlider.oninput = function () {
+    bText.value = bSlider.value;
+    update()
+  }
+  bText.oninput = function () {
+    bSlider.value = bText.value;
+    update()
+  }
+  bText.value = bSlider.value = b;
 
-  ctext.value = cslider.value = c;
-  cslider.oninput = function () { ctext.value = cslider.value; update() }
-  // ctext.value = cslider.value;
-  ctext.oninput = function () { cslider.value = ctext.value; update() }
+  cSlider.oninput = function () {
+    cText.value = cSlider.value;
+    update()
+  }
+  cText.oninput = function () {
+    cSlider.value = cText.value;
+    update()
+  }
+  cText.value = cSlider.value = c;
 
-  rtext.value = rslider.value = rot;
-  rslider.oninput = function () { rtext.value = rslider.value; update() }
-  // rtext.value = rslider.value;
-  rtext.oninput = function () { rslider.value = rtext.value; update() }
+  rSlider.oninput = function () {
+    rText.value = rSlider.value;
+    update()
+  }
+  rText.oninput = function () {
+    rSlider.value = rText.value;
+    update()
+  }
+  rText.value = rSlider.value = rot;
 
-  itext.value = islider.value = inc;
-  islider.oninput = function () { itext.value = islider.value; update() }
-  // itext.value = islider.value;
-  itext.oninput = function () { islider.value = itext.value; update() }
+  iSlider.oninput = function () {
+    iText.value = iSlider.value;
+    update()
+  }
+  iText.oninput = function () {
+    iSlider.value = iText.value;
+    update()
+  }
+  iText.value = iSlider.value = inc;
 
   document.getElementById(backgroundType).checked = true;
 
   // Right equation options
-  req1.oninput = function () { reqType = 'eq1'; changed = true; setEqLabel(); saveState(); refreshImages(); }
-  req2.oninput = function () { reqType = 'eq2'; changed = true; setEqLabel(); saveState(); refreshImages(); }
-  req3.oninput = function () { reqType = 'eq3'; changed = true; setEqLabel(); saveState(); refreshImages(); }
+  rEq1.oninput = function () {
+    rEqType = 'Eq1';
+    rChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
+  rEq2.oninput = function () {
+    rEqType = 'Eq2';
+    rChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
+  rEq3.oninput = function () {
+    rEqType = 'Eq3';
+    rChanged = true;
+    setEqLabel();
+    saveState();
+    refreshImages();
+  }
 
-  document.getElementById('r'+reqType).checked = true;
+  document.getElementById('r' + rEqType).checked = true;
 
   // Right equation variables
-  atext2.value = aslider2.value = a2;
-  aslider2.oninput = function () { atext2.value = aslider2.value; update() }
-  // atext2.value = aslider2.value;
-  atext2.oninput = function () { aslider2.value = atext2.value; update() }
+  aSlider2.oninput = function () {
+    aText2.value = aSlider2.value;
+    update()
+  }
+  aText2.oninput = function () {
+    aSlider2.value = aText2.value;
+    update()
+  }
+  aText2.value = aSlider2.value = a2;
 
-  btext2.value = bslider2.value = b2;
-  bslider2.oninput = function () { btext2.value = bslider2.value; update() }
-  // btext2.value = bslider2.value;
-  btext2.oninput = function () { bslider2.value = btext2.value; update() }
+  bSlider2.oninput = function () {
+    bText2.value = bSlider2.value;
+    update()
+  }
+  bText2.oninput = function () {
+    bSlider2.value = bText2.value;
+    update()
+  }
+  bText2.value = bSlider2.value = b2;
 
-  ctext2.value = cslider2.value = c2;
-  cslider2.oninput = function () { ctext2.value = cslider2.value; update() }
-  // ctext2.value = cslider2.value;
-  ctext2.oninput = function () { cslider2.value = ctext2.value; update() }
+  cSlider2.oninput = function () {
+    cText2.value = cSlider2.value;
+    update()
+  }
+  cText2.oninput = function () {
+    cSlider2.value = cText2.value;
+    update()
+  }
+  cText2.value = cSlider2.value = c2;
 
-  rtext2.value = rslider2.value = rot2;
-  rslider2.oninput = function () { rtext2.value = rslider2.value; update() }
-  // rtext2.value = rslider2.value;
-  rtext2.oninput = function () { rslider2.value = rtext2.value; update() }
+  rSlider2.oninput = function () {
+    rText2.value = rSlider2.value;
+    update()
+  }
+  rText2.oninput = function () {
+    rSlider2.value = rText2.value;
+    update()
+  }
+  rText2.value = rSlider2.value = rot2;
 
-  itext2.value = islider2.value = inc2;
-  islider2.oninput = function () { itext2.value = islider2.value; update() }
-  // itext2.value = islider2.value;
-  itext2.oninput = function () { islider2.value = itext2.value; update() }
+  iSlider2.oninput = function () {
+    iText2.value = iSlider2.value;
+    update()
+  }
+  iText2.oninput = function () {
+    iSlider2.value = iText2.value;
+    update()
+  }
+  iText2.value = iSlider2.value = inc2;
 
   // Zoom options
   zslider.value = zoom * 10;
-  zslider.oninput = function () { ztext.innerText = 'Value of zoom: ' + zslider.value / 10; update() }
+  zslider.oninput = function () {
+    ztext.innerText = 'Value of zoom: ' + zslider.value / 10;
+    update()
+  }
   ztext.innerText = 'Value of zoom: ' + zslider.value / 10;
 
   // Background options
-  coloredRadio.oninput = function () { backgroundType = 'colored'; backgroundChanged = true; saveState(); refreshImages(); }
-  blackRadio.oninput   = function () { backgroundType = 'black'; backgroundChanged = true; saveState(); refreshImages(); }
-  whiteRadio.oninput   = function () { backgroundType = 'white'; backgroundChanged = true; saveState(); refreshImages(); }
+  coloredRadio.oninput = function () {
+    backgroundType = 'colored';
+    backgroundChanged = true;
+    saveState();
+    refreshImages();
+  }
 
+  blackRadio.oninput = function () {
+    backgroundType = 'black';
+    backgroundChanged = true;
+    saveState();
+    refreshImages();
+  }
+
+  whiteRadio.oninput = function () {
+    backgroundType = 'white';
+    backgroundChanged = true;
+    saveState();
+    refreshImages();
+  }
 }
 
 ////////////////////////////////////////////////////////
 // Change eq label when new eq is selected
 
-function setEqLabel(){
-
-
-
-  switch (leqType) {
-    case 'eq1':
-      leqlabel.innerHTML = "r = A + B * cos(C * (&theta; + rot))";
+function setEqLabel() {
+  switch (lEqType) {
+    case 'Eq1':
+      lEqlabel.innerHTML = "r = A + B * cos(C * (&theta; + rot))";
       break;
-    case 'eq2':
-      leqlabel.innerHTML = "r = A * &theta;";
+    case 'Eq2':
+      lEqlabel.innerHTML = "r = A * &theta;";
       break;
-    case 'eq3':
-      leqlabel.innerHTML = "r = &radic;(A&sup2; * sin(B * (&theta; + rot)))";
+    case 'Eq3':
+      lEqlabel.innerHTML = "r = &radic;(A&sup2; * sin(B * (&theta; + rot)))";
       break;
 
     default:
       break;
   }
 
-
-
-  switch (reqType) {
-    case 'eq1':
-      reqlabel.innerHTML = "r = A<sub>2</sub> + B<sub>2</sub> * cos(C<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>))";
+  switch (rEqType) {
+    case 'Eq1':
+      rEqlabel.innerHTML = "r = A<sub>2</sub> + B<sub>2</sub> * cos(C<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>))";
       break;
-    case 'eq2':
-      reqlabel.innerHTML = "r = A<sub>2</sub> * &theta;<sub>2</sub>";
+    case 'Eq2':
+      rEqlabel.innerHTML = "r = A<sub>2</sub> * &theta;<sub>2</sub>";
       break;
-    case 'eq3':
-      reqlabel.innerHTML = "r = &radic;(A<sub>2</sub>&sup2; * sin(B<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>)))";
+    case 'Eq3':
+      rEqlabel.innerHTML = "r = &radic;(A<sub>2</sub>&sup2; * sin(B<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>)))";
       break;
 
     default:
       break;
   }
-
-
 }
 
 ////////////////////////////////////////////////////////
 // Load previous state from local storage
 
-function loadState(){
-  let leftEq=localStorage.getItem('leftEq');
-  if (leftEq){
+function loadState() {
+  let leftEq = localStorage.getItem('leftEq');
+  if (leftEq) {
     leftEq = JSON.parse(leftEq);
-    
-    leqType = leftEq.leqType;
+
+    lEqType = leftEq.lEqType;
     a = Number(leftEq.a);
     b = Number(leftEq.b);
     c = Number(leftEq.c);
@@ -273,42 +363,41 @@ function loadState(){
     backgroundType = leftEq.backgroundType;
   }
 
-  let rightEq=localStorage.getItem('rightEq');
-  if (rightEq){
+  let rightEq = localStorage.getItem('rightEq');
+  if (rightEq) {
     rightEq = JSON.parse(rightEq);
-  
-    reqType = rightEq.reqType;
+
+    rEqType = rightEq.rEqType;
     a2 = Number(rightEq.a);
     b2 = Number(rightEq.b);
     c2 = Number(rightEq.c);
     rot2 = Number(rightEq.rot);
     inc2 = Number(rightEq.inc);
   }
-
 }
 
 ////////////////////////////////////////////////////////
 // Save current state to local storage
 
-function saveState(){
+function saveState() {
   localStorage.setItem('leftEq', JSON.stringify({
-    leqType : leqType,
-    a : aslider.value,
-    b : bslider.value,
-    c : cslider.value,
-    rot : rslider.value,
-    inc : islider.value,
-    zoom : zslider.value / 10,
-    backgroundType : backgroundType
+    lEqType: lEqType,
+    a: aSlider.value,
+    b: bSlider.value,
+    c: cSlider.value,
+    rot: rSlider.value,
+    inc: iSlider.value,
+    zoom: zslider.value / 10,
+    backgroundType: backgroundType
   }));
 
   localStorage.setItem('rightEq', JSON.stringify({
-    reqType : reqType,
-    a : aslider2.value,
-    b : bslider2.value,
-    c : cslider2.value,
-    rot : rslider2.value,
-    inc : islider2.value
+    rEqType: rEqType,
+    a: aSlider2.value,
+    b: bSlider2.value,
+    c: cSlider2.value,
+    rot: rSlider2.value,
+    inc: iSlider2.value
   }));
 }
 
@@ -316,18 +405,18 @@ function saveState(){
 // Update variable values after a slider change
 
 function update() {
-  a = Number(aslider.value);
-  b = Number(bslider.value);
-  c = Number(cslider.value);
-  rot = Number(rslider.value);
-  inc = Number(islider.value);
-  a2 = Number(aslider2.value);
-  b2 = Number(bslider2.value);
-  c2 = Number(cslider2.value);
-  rot2 = Number(rslider2.value);
-  inc2 = Number(islider2.value);
+  a = Number(aSlider.value);
+  b = Number(bSlider.value);
+  c = Number(cSlider.value);
+  rot = Number(rSlider.value);
+  inc = Number(iSlider.value);
+  a2 = Number(aSlider2.value);
+  b2 = Number(bSlider2.value);
+  c2 = Number(cSlider2.value);
+  rot2 = Number(rSlider2.value);
+  inc2 = Number(iSlider2.value);
   zoom = Number(zslider.value / 10);
-  changed = true;
+  rChanged = lChanged = true;
   saveState();
   drawParametric();
 }
@@ -340,12 +429,10 @@ function resizeCanvas() {
   height = window.innerHeight;
   halfWidth = Math.floor(width / 2);
   halfHeight = Math.floor(height / 2);
-  // viewportWidth = window.innerWidth;
-  // viewportHeight = window.innerHeight;
 
   wide = width > height ? true : false;
 
-  changed = true;
+  rChanged = lChanged = true;
   backgroundChanged = true;
 
   canvas.width = backgroundCanvas.width = width;
@@ -358,31 +445,9 @@ function resizeCanvas() {
   refreshImages();
 }
 
-////////////////////////////////////////////////////////
-
-// function setBackground() {
-//   backgroundCanvas.width = width;
-//   backgroundCanvas.height = height;
-//   backgroundCanvas.style.width = width;
-//   backgroundCanvas.style.height = height;
-//   backgroundCtx.translate(halfWidth, halfHeight);
-// }
-
-////////////////////////////////////////////////////////
-
-// function setCanvas() {
-//   canvas.width = width;
-//   canvas.height = height;
-//   canvas.style.width = width;
-//   canvas.style.height = height;
-//   ctx.translate(halfWidth, halfHeight);
-//   clear(ctx);
-// }
-
 //////////////////////////////////////////////////////////////////////
 
 function refreshImages() {
-  // parametric();
   drawParametric();
 
   if (backgroundChanged) {
@@ -393,12 +458,10 @@ function refreshImages() {
       case 'colored':
         backgroundInterval = scrollingBackground();
         break;
-
       case 'black':
         backgroundCtx.fillStyle = '#000000';
         backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
         break;
-
       case 'white':
         backgroundCtx.fillStyle = '#FFFFFF';
         backgroundCtx.fillRect(-halfWidth, -halfHeight, width, height);
@@ -413,102 +476,87 @@ function refreshImages() {
 }
 
 //////////////////////////////////////////////////////////////////////
+// Draws the selected parametric eqs with the current parameters
 
-// function parametric() {
-//   // r=sin(A*theta)^2+cos(B*theta)^4
+function drawParametric() {
+  if (!rChanged && !lChanged) return;
 
-//   // use an interval 
-//   clearInterval(parainterval);
-//   parainterval = setInterval(drawParametric, 10);
+  rChanged = lChanged = false;
 
-  function drawParametric() {
-    if (!changed) return;
+  ctx.globalCompositeOperation = 'screen';
+  ctx.save();
+  clear(ctx);
 
-    changed = false;
+  ctx.scale(zoom, zoom);
 
-    ctx.globalCompositeOperation = compositeType;
-    ctx.save();
-    clear(ctx);
+  // draw left equation
+  for (let theta = 0; theta <= 2 * Math.PI; theta += Math.PI / inc) {
 
-    ctx.scale(zoom, zoom);
+    switch (lEqType) {
+      case 'Eq1':
+        r = (a + b * Math.sin(c * (theta + rot)));
+        neg_r = false;
+        break;
+      case 'Eq2':
+        r = a * theta;
+        neg_r = false;
+        break;
+      case 'Eq3':
+        r = Math.sqrt(Math.abs(a * a * Math.sin(b * (theta + rot))));
+        neg_r = true;
+        break;
 
-    // draw left equation
-    for (let theta = 0; theta <= 2 * Math.PI; theta += Math.PI / inc) {
+      default:
+        r = 1;
+        break;
+    }
 
-      switch (leqType) {
-        case 'eq1':
-          r = (a + b * Math.sin(c * (theta + rot)));
-          neg_r = false;
-          break;
-        case 'eq2':
-          r = a * theta;
-          neg_r = false;
-          break;
-        case 'eq3':
-          r = Math.sqrt(Math.abs(a * a * Math.sin(b * (theta + rot))));
-          neg_r = true;
-          break;
+    ctx.fillStyle = palette[(Math.abs(Math.round(265 * r) + colorTheta) % 1530)].color;
+    x = Math.cos(theta) * r * scale;
+    y = Math.sin(theta) * r * scale;
+    drawPoint(ctx, x, y, 1);
 
-        default:
-          r=1;
-          break;
-      }
+    if (neg_r) {
+      drawPoint(ctx, -x, -y, 1);
+    }
 
-      ctx.fillStyle = palette[(Math.abs(Math.round(265 * r) + colorTheta) % 1530)].color;
-      x = Math.cos(theta) * r * scale;
-      y = Math.sin(theta) * r * scale;
-      drawPoint(ctx, x, y, 1);
-      
-      if (neg_r) {
-        x = -Math.cos(theta) * r * scale;
-        y = -Math.sin(theta) * r * scale;
-        drawPoint(ctx, x, y, 1);
-      }
+  } // end for loop
 
-    } // end for loop
-      
-    // draw right equation
-    for (let theta = 0; theta <= 2 * Math.PI; theta += Math.PI / inc2) {
+  // draw right equation
+  for (let theta = 0; theta <= 2 * Math.PI; theta += Math.PI / inc2) {
 
-      switch (reqType) {
-        case 'eq1':
-          r = (a2 + b2 * Math.sin(c2 * (theta + rot2)));
-          neg_r = false;
-          break;
-        case 'eq2':
-          r = a2 * theta;
-          neg_r = false;
-          break;
-        case 'eq3':
-          r = Math.sqrt(Math.abs(a2 * a2 * Math.sin(b2 * (theta+rot2))));
-          neg_r = true;
-          break;
+    switch (rEqType) {
+      case 'Eq1':
+        r = (a2 + b2 * Math.sin(c2 * (theta + rot2)));
+        neg_r = false;
+        break;
+      case 'Eq2':
+        r = a2 * theta;
+        neg_r = false;
+        break;
+      case 'Eq3':
+        r = Math.sqrt(Math.abs(a2 * a2 * Math.sin(b2 * (theta + rot2))));
+        neg_r = true;
+        break;
 
-        default:
-          r=1;
-          break;
-      }
+      default:
+        r = 1;
+        break;
+    }
 
-      ctx.fillStyle = palette[(Math.abs(Math.round(265 * r) + colorTheta) % 1530)].color;
-      x = Math.cos(theta) * r * scale;
-      y = Math.sin(theta) * r * scale;
-      drawPoint(ctx, x, y, 1);
+    ctx.fillStyle = palette[(Math.abs(Math.round(265 * r) + colorTheta) % 1530)].color;
+    x = Math.cos(theta) * r * scale;
+    y = Math.sin(theta) * r * scale;
+    drawPoint(ctx, x, y, 1);
 
-      if (neg_r) {
-        drawPoint(ctx, -x, -y, 1);
-      }
+    if (neg_r) {
+      drawPoint(ctx, -x, -y, 1);
+    }
 
-    }  // end for loop
+  } // end for loop
 
-    ctx.restore();
-
-
-    // this is for graph line coloring - it needs changed to options
-    colorTheta -= 2;
-    if (colorTheta < 0) colorTheta = 1530;
-  }
-
-// }
+  ctx.restore();
+}
 
 //////////////////////////////////////////////////////////////////////
 // Utility Functions
@@ -545,7 +593,7 @@ function clear(ctx) {
 // Palette Functions
 //////////////////////////////////////////////////////////////////////
 
-// index:   into color palette
+// index:   into color palette array[1530]
 // percent: -1 = black bias, 0 = actual, 1 = white bias
 function getColor(index, percent = 0) {
   let color = palette[index % 1530].color;
@@ -557,11 +605,11 @@ function getColor(index, percent = 0) {
 // percent: -1 = black bias, 0 = actual, 1 = white bias
 function shadeRGBColor(color, percent = 0) {
   let f = color.split(','),
-    t = percent < 0 ? 0 : 255,
-    p = percent < 0 ? percent * -1 : percent,
-    R = parseInt(f[0].slice(4)),
-    G = parseInt(f[1]),
-    B = parseInt(f[2]);
+      t = percent < 0 ? 0 : 255,
+      p = percent < 0 ? percent * -1 : percent,
+      R = parseInt(f[0].slice(4)),
+      G = parseInt(f[1]),
+      B = parseInt(f[2]);
 
   return 'rgb(' + (Math.round((t - R) * p) + R) + ',' +
     (Math.round((t - G) * p) + G) + ',' +
@@ -574,36 +622,55 @@ function rgbToHex(r, g, b) {
   return ((r << 16) | (g << 8) | b).toString(16);
 }
 
+// Builds a palette array[1530] of palette objects
 function buildPalette() {
-  let r = 255, g = 0, b = 0;
+  let r = 255,
+      g = 0,
+      b = 0;
 
-  for (g = 0; g <= 255; g++) { addToPalette(r,g,b); }
+  for (g = 0; g <= 255; g++) {
+    addToPalette(r, g, b);
+  }
   g--;
 
-  for (r = 254; r >= 0; r--) { addToPalette(r,g,b); }
+  for (r = 254; r >= 0; r--) {
+    addToPalette(r, g, b);
+  }
   r++;
 
-  for (b = 1; b <= 255; b++) { addToPalette(r,g,b); }
+  for (b = 1; b <= 255; b++) {
+    addToPalette(r, g, b);
+  }
   b--;
 
-  for (g = 254; g >= 0; g--) { addToPalette(r,g,b); }
+  for (g = 254; g >= 0; g--) {
+    addToPalette(r, g, b);
+  }
   g++;
 
-  for (r = 1; r <= 255; r++) { addToPalette(r,g,b); }
+  for (r = 1; r <= 255; r++) {
+    addToPalette(r, g, b);
+  }
   r--;
 
-  for (b = 254; b > 0; b--) { addToPalette(r,g,b); }
+  for (b = 254; b > 0; b--) {
+    addToPalette(r, g, b);
+  }
   b++;
 
-  function addToPalette(r,g,b){
-    palette.push({ r, g, b, color: `rgb(${r},${g},${b})` });
+  function addToPalette(r, g, b) {
+    palette.push({
+      r,
+      g,
+      b,
+      color: `rgb(${r},${g},${b})`
+    });
   }
 
   // console.log(palette);
 }
 
-////////////////////////////////////////////////////////
-
+// Sets an interval to scroll colored background
 function scrollingBackground() {
 
   let interval = setInterval(scrollColors, 20, backgroundCtx, -.55);

@@ -13,25 +13,25 @@
     <canvas id="canvas1"></canvas>
     <canvas id="background"></canvas>
     <form id = "leftform">
-        <div id="lequations">
-            <label for="leq1">
-                <input type="radio" id="leq1" name="lequations" value="leq1" checked>
+        <div id="lEquations">
+            <label for="lEq1">
+                <input type="radio" id="lEq1" name="lEquations" value="lEq1" checked>
                 r = A + B * cos(C * (&theta; + rot))
             </label>
             <br>
-            <label for="leq2">
-                <input type="radio" id="leq2" name="lequations" value="leq2">
+            <label for="lEq2">
+                <input type="radio" id="lEq2" name="lEquations" value="lEq2">
                 r = A * &theta;
             </label>
             <br>              
-            <label for="leq3">
-                <input type="radio" id="leq3" name="lequations" value="leq3">
+            <label for="lEq3">
+                <input type="radio" id="lEq3" name="lEquations" value="lEq3">
                 r = &radic;(A&sup2; * sin(B * (&theta; + rot)))
             </label>
         </div>        
         <br>        
         
-        <label id="leqlabel" class="formula"></label>
+        <label id="lEqlabel" class="formula"></label>
         
         &nbsp;-10 <input id="aValue" class="slider" type="range" min="-10" max="10" step=".5"> 10
         <label class="varlabel">Value of A:</label>
@@ -94,27 +94,27 @@
     </form>
 
     <form id = "rightform">
-        <div id="requations">
-            <label for="req1">
-                <input type="radio" id="req1" name="requations" value="req1" checked>
+        <div id="rEquations">
+            <label for="rEq1">
+                <input type="radio" id="rEq1" name="rEquations" value="rEq1" checked>
                 r = A<sub>2</sub> + B<sub>2</sub> * cos(C<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>))
             </label>
             <br>
 
-            <label for="req2">
-                <input type="radio" id="req2" name="requations" value="req2">
+            <label for="rEq2">
+                <input type="radio" id="rEq2" name="rEquations" value="rEq2">
                 r = A<sub>2</sub> * &theta;<sub>2</sub>
             </label>
             <br>       
 
-            <label for="req3">
-                <input type="radio" id="req3" name="requations" value="req3">
+            <label for="rEq3">
+                <input type="radio" id="rEq3" name="rEquations" value="rEq3">
                 r = &radic;(A<sub>2</sub>&sup2; * sin(B<sub>2</sub> * (&theta;<sub>2</sub> + rot<sub>2</sub>)))
             </label>
         </div>        
         <br>    
        
-        <label id="reqlabel" class="formula"></label>
+        <label id="rEqlabel" class="formula"></label>
         
         &nbsp;-10 <input id="aValue2" class="slider" type="range" min="-10" max="10" step=".5"> 10
         <label class="varlabel">Value of A<sub>2</sub>:</label>
